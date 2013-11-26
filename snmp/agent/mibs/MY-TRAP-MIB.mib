@@ -1,0 +1,61 @@
+MY-TRAP-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, NOTIFICATION-TYPE
+        FROM SNMPv2-SMI
+    NOTIFICATION-GROUP
+        FROM SNMPv2-CONF
+    sysContact, sysName, sysLocation
+        FROM SNMPv2-MIB
+    otpModules, otpApplications
+        FROM OTP-REG
+    ;
+
+ testMIBModule MODULE-IDENTITY
+       LAST-UPDATED "200506100000Z"
+       ORGANIZATION "IDT"
+       CONTACT-INFO "Serge Aleynikov (serge@hq.idt.net)"
+       DESCRIPTION  "Experimental MIB module."
+       ::= { otpModules 10 }
+
+testMIB        OBJECT IDENTIFIER ::= { otpApplications 1000 }
+testMIBConformance
+               OBJECT IDENTIFIER ::= { testMIB 1 }
+testMIBTraps   OBJECT IDENTIFIER ::= { testMIB 2 }
+
+testMIBMyFirstCoolTrap NOTIFICATION-TYPE
+    OBJECTS {
+        sysContact,
+        sysName,
+        sysLocation
+        }
+    STATUS  current
+    DESCRIPTION
+        "This event is sent when an OTP user is desperately
+         trying to get the SNMP traps working."
+    ::= { testMIBTraps 1 }
+
+testMIBTrapGroups
+                OBJECT IDENTIFIER ::= { testMIBConformance 2 }
+
+testMIBTrapGroup NOTIFICATION-GROUP
+    NOTIFICATIONS { testMIBMyFirstCoolTrap }
+    STATUS        current
+    DESCRIPTION
+        "The notification which is generated from EVA."
+    ::= { testMIBTrapGroups 4 }
+
+END
+
+ --UCD-TRAP-TEST-MIB DEFINITIONS ::= BEGIN
+       --IMPORTS ucdExperimental FROM UCD-SNMP-MIB;
+
+ --demotraps OBJECT IDENTIFIER ::= { ucdExperimental 990 }
+
+ --demoTrap TRAP-TYPE
+       --ENTERPRISE demotraps
+       --VARIABLES { sysLocation }
+       --DESCRIPTION "An example of an SMIv1 trap"
+       --::= 17
+
+ --END
